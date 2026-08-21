@@ -15,9 +15,10 @@
   :root{
     --s0:#08080a; --s1:#0d0d10; --s2:#131317;
     --hair:rgba(255,255,255,.09); --hair2:rgba(255,255,255,.055);
-    /* t3/t4 carry the small mono labels; both were below WCAG AA on these backgrounds
-       (t4 was 2.72:1) and are now 4.85:1 and 3.80:1 respectively. */
-    --w:#fff; --t1:#f2f2f4; --t2:#a8a8b2; --t3:#7c7c87; --t4:#6b6b76;
+    /* t3/t4 carry the small mono labels. Both must clear WCAG AA against the *lightest*
+       surface on the page, which is the hero radial's peak (#15151b) rather than --s0.
+       Measured there: t3 6.52:1, t4 4.98:1. Checking only --s0 is what left them failing. */
+    --w:#fff; --t1:#f2f2f4; --t2:#a8a8b2; --t3:#9a9aa4; --t4:#85858f;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
     --gut:clamp(20px,4vw,44px); --sec:clamp(64px,7.6vw,104px); --hdr:64px;
@@ -29,7 +30,8 @@
      so it has to be explicitly hidden. */
   picture{display:contents}
   picture source{display:none}
-  html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hdr) + 24px);-webkit-text-size-adjust:100%}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hdr) + 24px);-webkit-text-size-adjust:100%;
+       color-scheme:dark;scrollbar-color:#2c2c36 var(--s0);scrollbar-width:thin}
   body{background:var(--s0);color:var(--t2);font:16.5px/1.68 var(--sans);
        -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
   .col{width:100%;max-width:1140px;margin:0 auto;padding-inline:var(--gut)}
@@ -38,16 +40,18 @@
        text-decoration-color:rgba(255,255,255,.28);transition:text-decoration-color .25s,color .25s}
   .lnk:hover{text-decoration-color:var(--w);color:var(--w)}
   ::selection{background:#2a2a34;color:#fff}
-  :focus-visible{outline:2px solid #6e6ef0;outline-offset:3px;border-radius:2px}
+  /* offset puts the ring outside the control, always on the dark page, so white is safe
+     even on the solid white button. The old violet appeared nowhere else in the palette. */
+  :focus-visible{outline:2px solid var(--w);outline-offset:3px;border-radius:2px}
 
   .hdr{position:fixed;top:0;left:0;right:0;height:var(--hdr);z-index:50;display:flex;align-items:center;
        transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
   .hdr.stuck{background:rgba(8,8,10,.8);backdrop-filter:blur(14px) saturate(1.4);
        -webkit-backdrop-filter:blur(14px) saturate(1.4);border-bottom-color:var(--hair2)}
   .hdr .col{display:flex;align-items:center;justify-content:space-between}
-  .brand{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--w)}
+  .brand{font-family:var(--mono);font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--w)}
   .hdr nav{display:flex;gap:clamp(13px,2.2vw,28px)}
-  .hdr nav a{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);transition:color .25s}
+  .hdr nav a{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--t3);transition:color .25s}
   .hdr nav a:hover{color:var(--w)}
 
   /* hero + stat bar */
@@ -71,7 +75,7 @@
   .btn.solid:hover{background:#d9d9e0;transform:translateY(-1px)}
   .btn.ghost{border:1px solid var(--hair);color:var(--t1)}
   .btn.ghost:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.04)}
-  .hloc{margin-top:clamp(15px,2.6vh,22px);font-family:var(--mono);font-size:10.5px;
+  .hloc{margin-top:clamp(15px,2.6vh,22px);font-family:var(--mono);font-size:11px;
         letter-spacing:.15em;text-transform:uppercase;color:var(--t4)}
   .portrait{position:relative;justify-self:end;width:min(376px,100%)}
   .portrait img{display:block;width:100%;height:auto;filter:grayscale(1) contrast(1.05);
@@ -83,7 +87,7 @@
   .bar b{display:block;color:var(--w);font-size:clamp(25px,3.1vw,40px);font-weight:700;
        letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
   .bar b i{font-style:normal;font-size:.5em;margin-left:1px}
-  .bar p{margin-top:8px;font-size:12.3px;line-height:1.45;color:var(--t3);max-width:25ch}
+  .bar p{margin-top:8px;font-size:12.5px;line-height:1.45;color:var(--t3);max-width:25ch}
 
   section{padding-block:var(--sec)}
   .lift{background:var(--s1)}
@@ -106,7 +110,7 @@
        background:linear-gradient(172deg,rgba(8,8,12,.48) 0%,rgba(8,8,12,.34) 34%,rgba(8,8,12,.62) 68%,rgba(8,8,12,.92) 100%)}
   .vid:hover .shot{opacity:1;transform:scale(1.03)}
   .vid:hover{border-color:rgba(255,255,255,.34);transform:translateY(-3px);box-shadow:0 18px 50px -22px rgba(0,0,0,.9)}
-  .vid .yt{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);display:flex;align-items:center;gap:9px}
+  .vid .yt{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--t2);display:flex;align-items:center;gap:9px}
   .vid .yt b{display:inline-grid;place-items:center;width:26px;height:18px;border-radius:5px;background:#e5343f;font-size:0}
   .vid .yt b::after{content:"";border-left:6px solid #fff;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
   .vid .mid{display:flex;align-items:center;gap:16px}
@@ -114,21 +118,21 @@
   .vid:hover .mid i{transform:scale(1.09)}
   .vid .mid svg{width:21px;height:21px;margin-left:3px;fill:#0a0a0c}
   .vid .mid span{color:var(--w);font-size:clamp(15px,1.45vw,18.5px);font-weight:620;letter-spacing:-.016em;line-height:1.3}
-  .vid .foot{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3)}
+  .vid .foot{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3)}
   code{font-family:var(--mono);font-size:.88em;color:var(--t1);background:rgba(255,255,255,.06);
        padding:1px 4px;border-radius:4px;margin-inline:-1px}
   figure.port{margin-top:clamp(24px,3vw,34px);border:1px solid var(--hair);border-radius:12px;
        overflow:hidden;background:var(--s2);max-width:520px}
   figure.port img{display:block;width:100%;height:auto;filter:grayscale(1) contrast(.96) brightness(.84)}
   figure.port figcaption{padding:11px 15px;border-top:1px solid var(--hair2);font-family:var(--mono);
-       font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--t4)}
+       font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--t4)}
   figure.ev{margin-top:clamp(26px,3.2vw,40px);border:1px solid var(--hair);border-radius:12px;
        overflow:hidden;background:var(--s2);max-width:566px}
   figure.ev img{display:block;width:100%;height:auto}
   figure.ev figcaption{padding:12px 16px;border-top:1px solid var(--hair2);font-family:var(--mono);
-       font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--t4)}
+       font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--t4)}
   .medtxt h3{color:var(--w);font-size:clamp(20px,2.2vw,29px);font-weight:660;letter-spacing:-.022em;line-height:1.18;margin-bottom:15px;text-wrap:balance}
-  .medtxt p{font-size:15.8px;line-height:1.66;color:var(--t2);max-width:46ch}
+  .medtxt p{font-size:15.5px;line-height:1.66;color:var(--t2);max-width:46ch}
   .medtxt .more{margin-top:21px;display:flex;flex-wrap:wrap;gap:10px}
   .pod{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(15px,2.5vw,28px);
        margin-top:clamp(22px,3vw,36px);padding:clamp(17px,2.1vw,25px) clamp(17px,2.3vw,28px);border-radius:14px;
@@ -138,33 +142,33 @@
   .pod .ic{flex:none;display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:#1DB954;transition:transform .35s}
   .pod:hover .ic{transform:scale(1.07)}
   .pod .ic svg{width:19px;height:19px;margin-left:3px;fill:#08120b}
-  .pod .show{font-family:var(--mono);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:#1DB954;display:block;margin-bottom:7px}
+  .pod .show{font-family:var(--mono);font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#1DB954;display:block;margin-bottom:7px}
   .pod h3{color:var(--w);font-size:clamp(15.5px,1.5vw,19px);font-weight:630;letter-spacing:-.017em;line-height:1.3;text-wrap:balance}
-  .pod .with{display:block;margin-top:10px;font-size:14.2px;color:var(--t2);line-height:1.55;max-width:62ch}
-  .pod .rt{text-align:right;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--t4);line-height:1.9;white-space:nowrap}
+  .pod .with{display:block;margin-top:10px;font-size:14.5px;color:var(--t2);line-height:1.55;max-width:62ch}
+  .pod .rt{text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--t4);line-height:1.9;white-space:nowrap}
 
   /* method */
   .cap{display:grid;grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:clamp(14px,4vw,54px);
        padding-block:clamp(28px,3.6vw,42px);border-top:1px solid var(--hair2);align-items:start}
   .cap:first-of-type{border-top:1px solid var(--hair)}
   .cap h3{color:var(--w);font-size:clamp(19px,2vw,26px);font-weight:650;letter-spacing:-.021em;line-height:1.2;text-wrap:balance}
-  .cap .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--t4);display:block;margin-bottom:11px}
-  .cap p{font-size:15.8px;line-height:1.66;color:var(--t2)}
+  .cap .n{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--t4);display:block;margin-bottom:11px}
+  .cap p{font-size:16.5px;line-height:1.66;color:var(--t2)}
   .cap p + p{margin-top:11px}
-  .cap .ev{margin-top:15px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--t4);line-height:1.9}
+  .cap .ev{margin-top:15px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--t4);line-height:1.9}
 
   /* case study */
   .cs{display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:start}
-  .cs .side .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);
+  .cs .side .tag{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);
        display:block;padding-block:9px;border-top:1px solid var(--hair2)}
   .cs .side .tag:first-child{border-top:1px solid var(--hair)}
   .cs .side .tag b{display:block;color:var(--w);font-weight:600;font-size:14.5px;letter-spacing:-.01em;
        text-transform:none;font-family:var(--sans);margin-top:3px}
   .step{padding-block:clamp(18px,2.2vw,26px);border-top:1px solid var(--hair2)}
   .step:first-child{border-top:none;padding-top:0}
-  .step em{font-style:normal;display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;
+  .step em{font-style:normal;display:block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
        text-transform:uppercase;color:var(--t4);margin-bottom:10px}
-  .step p{font-size:16.2px;line-height:1.68;color:var(--t2);max-width:58ch}
+  .step p{font-size:16.5px;line-height:1.68;color:var(--t2);max-width:58ch}
   .step p + p{margin-top:12px}
   .step p b{color:var(--w);font-weight:600}
   .midcta{margin-top:clamp(34px,4.5vw,56px);padding-top:clamp(26px,3.2vw,38px);border-top:1px solid var(--hair);
@@ -175,7 +179,7 @@
   .sect{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:12px clamp(20px,4vw,46px);
         padding-block:clamp(22px,2.6vw,32px);border-top:1px solid var(--hair2);align-items:center}
   .sect:first-of-type{border-top:1px solid var(--hair)}
-  .sect dt span{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);display:block}
+  .sect dt span{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);display:block}
   .sect dt em{font-style:normal;display:block;margin-top:8px;font-size:13.2px;line-height:1.5;color:var(--t4);max-width:26ch}
   .sect dd{display:flex;flex-wrap:wrap;align-items:center;gap:clamp(16px,2.2vw,22px) clamp(24px,3vw,38px)}
   /* Client marks. Each is a white-on-transparent PNG; heights are set per logo by optical
@@ -190,20 +194,20 @@
   .lg[data-b="seattletimes"]{--h:21px} .lg[data-b="sixflags"]{--h:26px}
   .lg[data-b="tamu"]{--h:27px}       .lg[data-b="ups"]{--h:40px}
   .lg[data-b="usbank"]{--h:25px}     .lg[data-b="yum"]{--h:30px}
-  .bfnote{margin-top:clamp(26px,3.4vw,42px);font-size:14.6px;color:var(--t3);max-width:64ch}
+  .bfnote{margin-top:clamp(26px,3.4vw,42px);font-size:14.5px;color:var(--t3);max-width:64ch}
 
   /* thesis */
   .th .lede{max-width:62ch}
   .thlist{margin-top:clamp(28px,3.6vw,44px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.6vw,34px)}
   .thlist div{border-top:1px solid var(--hair);padding-top:18px}
   .thlist strong{display:block;color:var(--w);font-size:16.5px;font-weight:640;letter-spacing:-.016em;margin-bottom:9px}
-  .thlist p{font-size:14.8px;line-height:1.6;color:var(--t2)}
+  .thlist p{font-size:14.5px;line-height:1.6;color:var(--t2)}
 
   /* before */
   .bef{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(16px,4vw,54px)}
-  .bef p{font-size:16.3px;line-height:1.68;max-width:58ch}
+  .bef p{font-size:16.5px;line-height:1.68;max-width:58ch}
   .bef p + p{margin-top:15px}
-  .bef .stack{margin-top:25px;font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;line-height:2.15;color:var(--t3)}
+  .bef .stack{margin-top:25px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;line-height:2.15;color:var(--t3)}
 
   /* contact */
   .ct{padding-block:clamp(90px,12vw,156px)}
@@ -211,16 +215,16 @@
        margin-bottom:clamp(38px,5vw,64px)}
   .ct .want div{border-top:1px solid var(--hair);padding-top:16px}
   .ct .want strong{display:block;color:var(--w);font-size:15.5px;font-weight:630;margin-bottom:7px;letter-spacing:-.014em}
-  .ct .want p{font-size:14.4px;line-height:1.58;color:var(--t2)}
+  .ct .want p{font-size:14.5px;line-height:1.58;color:var(--t2)}
   .ct .big{display:inline-block;font-size:clamp(24px,4.4vw,56px);font-weight:700;letter-spacing:-.032em;
        line-height:1.1;color:var(--w);word-break:break-word;border-bottom:2px solid rgba(255,255,255,.22);
        padding-bottom:6px;transition:border-color .3s}
   .ct .big:hover{border-bottom-color:var(--w)}
   .ct .sub{margin-top:clamp(24px,3.2vw,38px);display:flex;flex-wrap:wrap;gap:14px 30px;color:var(--t2);font-size:15.5px}
-  .ct .loc{margin-top:19px;font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--t4)}
+  .ct .loc{margin-top:19px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--t4)}
   footer{border-top:1px solid var(--hair2);padding-block:26px 46px}
   footer .col{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
-  footer span{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--t4)}
+  footer span{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--t4)}
 
   .js .rv{opacity:0;transform:translateY(20px);
           transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1)}
@@ -232,12 +236,12 @@
     .hmid{padding-bottom:22px}
     .portrait{width:min(292px,100%)}
     h1{font-size:clamp(32px,4.4vw,52px)}
-    .hsub{margin-top:16px;font-size:15.8px}
+    .hsub{margin-top:16px;font-size:15.5px}
     .hact{margin-top:20px}
     .hloc{margin-top:13px}
     .bar .col{padding-block:16px}
     .bar b{font-size:clamp(23px,2.5vw,32px)}
-    .bar p{margin-top:6px;font-size:11.6px}
+    .bar p{margin-top:6px;font-size:12.5px}
   }
   @media (max-height:680px) and (min-width:901px){
     .portrait{width:min(232px,100%)}
@@ -369,7 +373,7 @@
       <div>
         <p>Most of the useful work happens before anything gets built. The first sessions go to
         understanding the environment with their data and security people: the permissions model,
-        where the data actually sits, and what stalled any previous attempt. Teams in regulated
+        where the data sits, and what stalled any previous attempt. Teams in regulated
         industries have usually been burned by something that demoed well and then could not be
         deployed. Knowing what that was changes what they will agree to next.</p>
         <p>From there the build happens in their systems rather than a sandbox. Connectors,
@@ -449,8 +453,8 @@
         <div class="step">
           <em>Why it matters</em>
           <p>None of that came down to model capability. It came down to governance, API access, and
-          knowing which kinds of failure tend to stay hidden. That is most of what this work
-          actually is, on a stage or otherwise.</p>
+          knowing which kinds of failure tend to stay hidden. That is most of what this work is,
+          on a stage or otherwise.</p>
         </div>
         <figure class="ev">
           <picture>
@@ -473,9 +477,9 @@
     <span class="eyebrow">What the work is for</span>
     <h2>The job is finished when the team doesn't need you.</h2>
     <p class="lede">Capability works best sitting with the people closest to the problem. A
-    deployment that only functions while its builder is in the room has really just moved the
+    deployment that only functions while its builder is in the room has moved the
     dependency somewhere less visible.</p>
-    <p class="lede">The real deliverable is a team that can
+    <p class="lede">The deliverable is a team that can
     extend it: patterns they can copy, standards they hold each other to, and enough hands-on time
     that the next workload doesn't need a phone call. Hackathons tend to work better than documentation. Sitting with a
     customer's team in Japan beats shipping them a runbook.</p>
@@ -544,7 +548,7 @@
     fastest right now:</p>
     <div class="thlist">
       <div><strong>Full SaaS replacement</strong><p>Most core SaaS functions a company pays for
-      every month can now be rebuilt in-house, fitted exactly to how that team actually works,
+      every month can now be rebuilt in-house, fitted to how that team works,
       and owned outright. The build-versus-buy line moved, and most budgets have not caught up.</p></div>
       <div><strong>Agentic workflow optimization</strong><p>The wins are in the workflows nobody
       documented: the handoffs, the approvals, the copy-paste between systems. Agents with
