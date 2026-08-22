@@ -54,9 +54,35 @@
   .hdr nav a:hover{color:var(--w)}
 
   /* hero + stat bar */
-  .hero{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;
-        padding-top:calc(var(--hdr) + clamp(20px,5vh,52px));padding-bottom:0;
-        background:radial-gradient(78% 58% at 72% 24%,#15151b 0%,transparent 62%),var(--s0)}
+  .hero{position:relative;isolation:isolate;overflow:hidden;min-height:100vh;min-height:100svh;
+        display:flex;flex-direction:column;
+        padding-top:calc(var(--hdr) + clamp(20px,5vh,52px));padding-bottom:0;background:var(--s0)}
+  /* The hero light is its own layer so it can breathe. The peak stays #15151b — the surface the
+     t3/t4 contrast numbers in :root are measured against — because opacity only ever dips below 1
+     and the grain sits at 4% overlay (worst-case lightening ~2 luminance points, re-measured). */
+  .hero::before{content:"";position:absolute;inset:-12% -6%;z-index:-1;pointer-events:none;
+        background:radial-gradient(78% 58% at 72% 24%,#15151b 0%,transparent 62%);
+        animation:breathe 10s ease-in-out 1.4s infinite}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.045);opacity:.85}}
+  /* dot grid, masked to the same off-centre light so it stays away from the text column and the
+     mono labels whose contrast is measured above */
+  .hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+        background-image:radial-gradient(rgba(255,255,255,.038) 1px,transparent 1px);
+        background-size:26px 26px;
+        -webkit-mask-image:radial-gradient(60% 52% at 72% 26%,#000 30%,transparent 74%);
+        mask-image:radial-gradient(60% 52% at 72% 26%,#000 30%,transparent 74%)}
+  .gr{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+  /* load choreography — once, calm, the same curve as the scroll reveals; gated on .js so
+     nothing is ever hidden without script */
+  .js .kick,.js .hgrid h1,.js .hsub,.js .hact,.js .hloc,.js .portrait,.js .bar .col>div{
+        animation:hin .75s cubic-bezier(.22,.61,.36,1) calc(.1s + var(--hd,0)*.08s) both}
+  .js .kick{--hd:0}.js .hgrid h1{--hd:1}.js .hsub{--hd:2}.js .hsub.byline{--hd:3}
+  .js .hact{--hd:4}.js .hloc{--hd:5}.js .portrait{--hd:2}
+  .js .bar .col>div{--hd:6}.js .bar .col>div:nth-child(2){--hd:7}
+  .js .bar .col>div:nth-child(3){--hd:8}.js .bar .col>div:nth-child(4){--hd:9}
+  @keyframes hin{from{opacity:0;transform:translateY(12px);filter:blur(6px)}
+                 to{opacity:1;transform:none;filter:blur(0)}}
   .hmid{flex:1;display:flex;align-items:center;padding-bottom:clamp(30px,5vh,56px)}
   .hgrid{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(0,.84fr);
          gap:clamp(26px,5vw,60px);align-items:center;width:100%}
@@ -64,15 +90,23 @@
         color:var(--t4);margin-bottom:clamp(16px,3vh,26px);display:block}
   h1{font-size:clamp(34px,5.7vw,72px);line-height:1.015;letter-spacing:-.033em;font-weight:700;
      color:var(--w);max-width:14ch;text-wrap:balance}
+  /* vertical luminance falloff on display type — lit, not printed. color stays as fallback
+     where background-clip:text is unsupported. */
+  h1,h2:not(.eyebrow){background:linear-gradient(180deg,#fff 45%,rgba(255,255,255,.78));
+     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .hsub{margin-top:clamp(18px,3vh,28px);font-size:clamp(16px,1.32vw,18.5px);line-height:1.62;
         color:var(--t2);max-width:50ch}
   .hsub.byline{margin-top:15px;color:var(--t3);font-size:15.5px}
   .hact{margin-top:clamp(22px,3.6vh,34px);display:flex;flex-wrap:wrap;gap:11px 13px;align-items:center}
   .btn{display:inline-flex;align-items:center;gap:9px;padding:12px 22px;border-radius:999px;
-       font-size:14.5px;font-weight:600;transition:all .25s}
-  .btn.solid{background:var(--w);color:#0a0a0c}
-  .btn.solid:hover{background:#d9d9e0;transform:translateY(-1px)}
-  .btn.ghost{border:1px solid var(--hair);color:var(--t1)}
+       font-size:14.5px;font-weight:600;
+       transition:background .25s,border-color .25s,box-shadow .25s,transform .25s,color .25s}
+  .btn.solid{background:var(--w);color:#0a0a0c;
+       box-shadow:inset 0 -1px 0 rgba(0,0,0,.12),0 10px 28px -14px rgba(255,255,255,.3)}
+  .btn.solid:hover{background:#d9d9e0;transform:translateY(-1px);
+       box-shadow:inset 0 -1px 0 rgba(0,0,0,.12),0 12px 34px -14px rgba(255,255,255,.45)}
+  .btn.ghost{border:1px solid var(--hair);color:var(--t1);
+       box-shadow:inset 0 1px 0 rgba(255,255,255,.07)}
   .btn.ghost:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.04)}
   .hloc{margin-top:clamp(15px,2.6vh,22px);font-family:var(--mono);font-size:11px;
         letter-spacing:.15em;text-transform:uppercase;color:var(--t4)}
@@ -87,9 +121,11 @@
        letter-spacing:-.035em;line-height:1;font-variant-numeric:tabular-nums}
   .bar b i{font-style:normal;font-size:.5em;margin-left:1px}
   .bar p{margin-top:8px;font-size:12.5px;line-height:1.45;color:var(--t3);max-width:25ch}
+  .bar .col>div+div{border-left:1px solid var(--hair2);padding-left:clamp(14px,2.4vw,34px)}
 
   section{padding-block:var(--sec)}
-  .lift{background:var(--s1)}
+  .lift{background:linear-gradient(180deg,#0e0e12,#0c0c0f);border-block:1px solid var(--hair2);
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
   .eyebrow{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
            text-transform:uppercase;color:var(--t4);margin-bottom:clamp(24px,3.6vw,40px);font-weight:400}
   h2{font-size:clamp(29px,4.4vw,58px);line-height:1.06;letter-spacing:-.028em;font-weight:700;color:var(--w);text-wrap:balance}
@@ -102,10 +138,12 @@
   .med{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:clamp(24px,4vw,54px);align-items:center}
   .vid{position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid var(--hair);
        display:flex;flex-direction:column;justify-content:space-between;padding:clamp(17px,2.3vw,25px);
-       background:#0b0b0f;isolation:isolate;transition:border-color .4s,transform .4s,box-shadow .4s}
+       background:#0b0b0f;isolation:isolate;box-shadow:0 12px 32px -20px rgba(0,0,0,.7);
+       transition:border-color .4s,transform .4s,box-shadow .4s}
   .vid .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;
        opacity:.95;transition:opacity .5s,transform .6s}
   .vid::after{content:"";position:absolute;inset:0;z-index:-1;
+       box-shadow:inset 0 1px 0 rgba(255,255,255,.09);
        background:linear-gradient(172deg,rgba(8,8,12,.48) 0%,rgba(8,8,12,.34) 34%,rgba(8,8,12,.62) 68%,rgba(8,8,12,.92) 100%)}
   .vid:hover .shot{opacity:1;transform:scale(1.03)}
   .vid:hover{border-color:rgba(255,255,255,.34);transform:translateY(-3px);box-shadow:0 18px 50px -22px rgba(0,0,0,.9)}
@@ -121,12 +159,12 @@
   code{font-family:var(--mono);font-size:.88em;color:var(--t1);background:rgba(255,255,255,.06);
        padding:1px 4px;border-radius:4px;margin-inline:-1px}
   figure.port{margin-top:clamp(24px,3vw,34px);border:1px solid var(--hair);border-radius:12px;
-       overflow:hidden;background:var(--s2);max-width:520px}
+       overflow:hidden;background:var(--s2);max-width:520px;box-shadow:0 12px 32px -20px rgba(0,0,0,.65)}
   figure.port img{display:block;width:100%;height:auto;filter:grayscale(1) contrast(.96) brightness(.84)}
   figure.port figcaption{padding:11px 15px;border-top:1px solid var(--hair2);font-family:var(--mono);
        font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--t4)}
   figure.ev{margin-top:clamp(26px,3.2vw,40px);border:1px solid var(--hair);border-radius:12px;
-       overflow:hidden;background:var(--s2);max-width:566px}
+       overflow:hidden;background:var(--s2);max-width:566px;box-shadow:0 12px 32px -20px rgba(0,0,0,.65)}
   figure.ev img{display:block;width:100%;height:auto}
   figure.ev figcaption{padding:12px 16px;border-top:1px solid var(--hair2);font-family:var(--mono);
        font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--t4)}
@@ -136,8 +174,10 @@
   .pod{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:clamp(15px,2.5vw,28px);
        margin-top:clamp(22px,3vw,36px);padding:clamp(17px,2.1vw,25px) clamp(17px,2.3vw,28px);border-radius:14px;
        border:1px solid var(--hair);background:linear-gradient(120deg,#141815 0%,#0d0d10 58%,#08080a 100%);
+       box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 12px 32px -20px rgba(0,0,0,.7);
        transition:border-color .4s,transform .4s,box-shadow .4s}
-  .pod:hover{border-color:rgba(29,185,84,.45);transform:translateY(-2px);box-shadow:0 16px 44px -24px rgba(0,0,0,.9)}
+  .pod:hover{border-color:rgba(29,185,84,.45);transform:translateY(-2px);
+       box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 16px 44px -24px rgba(0,0,0,.9)}
   .pod .ic{flex:none;display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:#1DB954;transition:transform .35s}
   .pod:hover .ic{transform:scale(1.07)}
   .pod .ic svg{width:19px;height:19px;margin-left:3px;fill:#08120b}
@@ -154,10 +194,10 @@
   .cap .n{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--t4);display:block;margin-bottom:11px}
   .cap p{font-size:16.5px;line-height:1.66;color:var(--t2)}
   .cap p + p{margin-top:11px}
-  .cap .ev{margin-top:15px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--t4);line-height:1.9}
 
-  /* case study */
-  .cs{display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:start}
+  /* case study — lives inside #proof, directly under the keynote card it deep-dives */
+  .cs{display:grid;grid-template-columns:minmax(0,.42fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);
+      align-items:start;margin-top:clamp(44px,5.5vw,72px)}
   .cs .side .tag{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);
        display:block;padding-block:9px;border-top:1px solid var(--hair2)}
   .cs .side .tag:first-child{border-top:1px solid var(--hair)}
@@ -197,10 +237,10 @@
 
   /* thesis */
   .th .lede{max-width:62ch}
-  .thlist{margin-top:clamp(28px,3.6vw,44px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.6vw,34px)}
+  .thlist{margin-top:clamp(28px,3.6vw,44px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(18px,2.6vw,34px)}
   .thlist div{border-top:1px solid var(--hair);padding-top:18px}
   .thlist strong{display:block;color:var(--w);font-size:16.5px;font-weight:640;letter-spacing:-.016em;margin-bottom:9px}
-  .thlist p{font-size:14.5px;line-height:1.6;color:var(--t2)}
+  .thlist p{font-size:14.5px;line-height:1.6;color:var(--t2);max-width:52ch}
 
   /* before */
   .bef{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(16px,4vw,54px)}
@@ -209,7 +249,10 @@
   .bef .stack{margin-top:25px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;line-height:2.15;color:var(--t3)}
 
   /* contact */
-  .ct{padding-block:clamp(90px,12vw,156px)}
+  /* the closing light echoes the opening one. Peak #111117 is darker than the hero peak, so the
+     t3/t4 labels measured in :root stay above AA here. */
+  .ct{padding-block:clamp(90px,12vw,156px);
+      background:radial-gradient(56% 46% at 50% 16%,#111117 0%,transparent 62%)}
   .ct .want{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,2.6vw,32px);
        margin-bottom:clamp(38px,5vw,64px)}
   .ct .want div{border-top:1px solid var(--hair);padding-top:16px}
@@ -228,6 +271,22 @@
   .js .rv{opacity:0;transform:translateY(20px);
           transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1)}
   .js .rv.in{opacity:1;transform:none}
+  /* siblings that enter together arrive in order, on the same curve */
+  .js .sect.rv:nth-of-type(2){transition-delay:.07s}.js .sect.rv:nth-of-type(3){transition-delay:.14s}
+  .js .sect.rv:nth-of-type(4){transition-delay:.21s}.js .sect.rv:nth-of-type(5){transition-delay:.28s}
+  .js .cap.rv:nth-of-type(2){transition-delay:.08s}
+  .js .rv .thlist>div,.js .rv .want>div{opacity:0;transform:translateY(14px);
+          transition:opacity .6s cubic-bezier(.22,.61,.36,1) var(--d,0s),transform .6s cubic-bezier(.22,.61,.36,1) var(--d,0s)}
+  .js .rv.in .thlist>div,.js .rv.in .want>div{opacity:1;transform:none}
+  .thlist>div:nth-child(2),.want>div:nth-child(2){--d:.09s}
+  .want>div:nth-child(3){--d:.18s}
+  /* their top rules draw in with them; the border stays for no-JS visitors */
+  .js .thlist>div,.js .ct .want>div{border-top-color:transparent;position:relative}
+  .js .thlist>div::before,.js .ct .want>div::before{content:"";position:absolute;top:-1px;left:0;
+          right:0;height:1px;background:var(--hair);transform:scaleX(0);transform-origin:left;
+          transition:transform .8s cubic-bezier(.22,.61,.36,1) calc(var(--d,0s) + .1s)}
+  .js .rv.in .thlist>div::before,.js .rv.in .want>div::before{transform:scaleX(1)}
+  .hdr nav a[aria-current]{color:var(--w)}
 
 
   @media (max-height:820px) and (min-width:901px){
@@ -252,11 +311,13 @@
     .portrait{justify-self:start;width:min(268px,70%);order:-1}
     h1{max-width:16ch}
     .bar .col{grid-template-columns:repeat(2,1fr);gap:24px 18px}
+    .bar .col>div+div{border-left:none;padding-left:0}
+    .bar .col>div:nth-child(even){border-left:1px solid var(--hair2);padding-left:16px}
     .med,.cap,.bef,.cs{grid-template-columns:1fr;gap:16px}
     .thlist,.ct .want{grid-template-columns:1fr;gap:20px}
     .sect{grid-template-columns:1fr;gap:10px}
     .sect dt{padding-top:0}
-    .hdr nav a:nth-child(2),.hdr nav a:nth-child(4){display:none}
+    .hdr nav a:nth-child(2){display:none}
   }
   @media(max-width:760px){
     .pod{grid-template-columns:auto minmax(0,1fr);gap:14px 16px}
@@ -266,7 +327,15 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .js .rv{opacity:1;transform:none;transition:none}
-    *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+    /* Pseudo-elements animate too (the hero glow lives on ::before), and delays hide content
+       just as well as durations do — zero all of it, everywhere, and clamp loops to one run. */
+    *,::before,::after{transition-duration:.01ms!important;animation-duration:.01ms!important;
+        transition-delay:0s!important;animation-delay:0s!important;animation-iteration-count:1!important}
+    /* the child-stagger and self-drawing-rule states must never depend on JS reaching the
+       reveal path — restore them here outright */
+    .js .rv .thlist>div,.js .rv .want>div{opacity:1;transform:none;transition:none}
+    .js .thlist>div,.js .ct .want>div{border-top-color:var(--hair)}
+    .js .thlist>div::before,.js .ct .want>div::before{content:none}
   }
 </style>
 </head>
@@ -278,7 +347,6 @@
     <nav>
       <a href="#proof">Proof</a>
       <a href="#method">Method</a>
-      <a href="#case">Case study</a>
       <a href="#built">Built for</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -286,6 +354,7 @@
 </header>
 
 <div class="hero" id="top">
+  <div class="gr" aria-hidden="true"></div>
   <div class="hmid">
     <div class="col hgrid">
       <div>
@@ -315,16 +384,16 @@
     <div class="col">
       <div><b><span>5</span><i> min</i></b><p>to wire an agent to live enterprise data</p></div>
       <div><b><span>4</span><i> wks</i></b><p>discovery to production, at the outside</p></div>
-      <div><b><span>25</span></b><p>broken pipelines fixed live on stage, zero errors</p></div>
+      <div><b><span>25</span></b><p>pipeline repairs shipped live on stage, none failed</p></div>
       <div><b><span>67</span></b><p>engineers and CoE members now doing this work</p></div>
     </div>
   </div>
 </div>
 
 <section id="proof">
-  <div class="col rv">
+  <div class="col">
     <h2 class="eyebrow">Proof</h2>
-    <div class="med">
+    <div class="med rv">
       <a class="vid" href="https://www.youtube.com/watch?v=7HvOlSnfubQ" target="_blank" rel="noopener"
          aria-label="Watch the CEO Keynote and AI Demo with William West on YouTube">
         <picture>
@@ -344,79 +413,11 @@
         enterprise data with Claude Code, on stage with Josh James, fixing and extending a running
         Domo instance in front of the company's largest audience of the year.</p>
         <div class="more">
-          <a class="btn ghost" href="https://www.youtube.com/watch?v=7HvOlSnfubQ" target="_blank" rel="noopener">Watch the keynote</a>
           <a class="btn ghost" href="https://github.com/Willwwest/domopalooza2026" target="_blank" rel="noopener">Source on GitHub</a>
         </div>
       </div>
     </div>
-    <a class="pod" href="https://open.spotify.com/episode/3UsIQgwNsOesVHUtFTl23L" target="_blank" rel="noopener"
-       aria-label="Listen: From Dashboards to Digital Operators, on Spotify">
-      <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
-      <span>
-        <span class="show">Governed Data for Agentic AI · Podcast</span>
-        <h3>From Dashboards to Digital Operators: Building Agentic AI Apps on the Domo Platform</h3>
-        <span class="with">Building a human-resources agentic application live with Domo CMO Mark Boothe —
-        human-in-the-loop workflows, role-level security, and pro-code App Studio builds.</span>
-      </span>
-      <span class="rt">28 Jul 2026<br>39 min<br>Listen on Spotify</span>
-    </a>
-  </div>
-</section>
-
-<section id="method" class="lift">
-  <div class="col">
-    <h2 class="eyebrow">How the work goes</h2>
-
-    <div class="cap rv">
-      <h3><span class="n" aria-hidden="true">01</span>Discovery first, then building inside their environment</h3>
-      <div>
-        <p>Most of the useful work happens before anything gets built. The first sessions go to
-        understanding the environment with their data and security people: the permissions model,
-        where the data sits, and what stalled any previous attempt. Teams in regulated
-        industries have usually been burned by something that demoed well and then could not be
-        deployed. Knowing what that was changes what they will agree to next.</p>
-        <p>From there the build happens in their systems rather than a sandbox. Connectors,
-        authentication, pipelines and RBAC constraints get worked out against real conditions
-        instead of surfacing at the end. An agent can be wired to live customer data in five to
-        ten minutes, a usable prototype takes an afternoon, and production runs one to four weeks.</p>
-        <p>Moving at that pace is less about speed than about giving people something concrete to
-        react to. Teams describe what they want far more precisely once they can see their own
-        data moving, and the questions that follow that first session are usually the ones worth
-        building around.</p>
-        <p class="ev">Regions Bank · Manulife · U.S. Bank · Texas A&amp;M AgriLife</p>
-      </div>
-    </div>
-
-    <div class="cap rv">
-      <h3><span class="n" aria-hidden="true">02</span>Each engagement makes the next one cheaper</h3>
-      <div>
-        <p>Every engagement produces pattern libraries, implementation playbooks and readiness
-        checklists. The next deployment inside that organization starts from those, and moves
-        considerably faster than the first one did.</p>
-        <p>The same compounding shows up in the running cost. As the reusable components get
-        tighter, token consumption falls and the model tier each task requires comes down with it.
-        That makes engineering quality and inference spend the same lever, and most budgets still
-        treat them as separate problems.</p>
-      </div>
-    </div>
-
-    <div class="cap rv">
-      <h3><span class="n" aria-hidden="true">03</span>A forward-deployed function built from scratch</h3>
-      <div>
-        <p>At Domo, inside a year, that meant building the practice as well as the deployments:
-        a repeatable five-phase delivery model, an engineering team of twenty, and a forty-seven
-        person Center of Excellence. The build standards and the hiring bar came with it.</p>
-        <p>Several hundred people have come through the training underneath that, across every
-        department, along with customer teams in the United States and Japan.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="case">
-  <div class="col">
-    <h2 class="eyebrow">Case study — live on stage</h2>
-    <div class="cs rv">
+    <div class="cs rv" id="case">
       <div class="side">
         <span class="tag">Setting<b>Domopalooza mainstage, unrehearsed</b></span>
         <span class="tag">Data<b>Mortgage regulatory ETLs (HMDA LAR)</b></span>
@@ -464,6 +465,17 @@
         </figure>
       </div>
     </div>
+    <a class="pod rv" href="https://open.spotify.com/episode/3UsIQgwNsOesVHUtFTl23L" target="_blank" rel="noopener"
+       aria-label="Listen: From Dashboards to Digital Operators, on Spotify">
+      <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+      <span>
+        <span class="show">Governed Data for Agentic AI · Podcast</span>
+        <h3>From Dashboards to Digital Operators: Building Agentic AI Apps on the Domo Platform</h3>
+        <span class="with">Building a human-resources agentic application live with Domo CMO Mark Boothe —
+        human-in-the-loop workflows, role-level security, and pro-code App Studio builds.</span>
+      </span>
+      <span class="rt">28 Jul 2026<br>39 min<br>Listen on Spotify</span>
+    </a>
     <div class="midcta rv">
       <p>If this is the shape of the problem you have, I'd like to hear about it.</p>
       <a class="btn solid" href="mailto:willwwest87@gmail.com">Start a conversation</a>
@@ -471,9 +483,51 @@
   </div>
 </section>
 
-<section class="lift">
+<section id="method" class="lift">
+  <div class="col">
+    <h2 class="eyebrow">How the work goes</h2>
+
+    <div class="cap rv">
+      <h3><span class="n" aria-hidden="true">01</span>Discovery first, then building inside their environment</h3>
+      <div>
+        <p>Most of the useful work happens before anything gets built. The first sessions go to
+        understanding the environment with their data and security people: the permissions model,
+        where the data sits, and what stalled any previous attempt. Teams in regulated
+        industries have usually been burned by something that demoed well and then could not be
+        deployed. Knowing what that was changes what they will agree to next. When a deployment
+        has to clear a bank's security review, the engineering problem stops being the model and
+        starts being everything around it.</p>
+        <p>From there the build happens in their systems rather than a sandbox. Connectors,
+        authentication, pipelines and RBAC constraints get worked out against real conditions
+        instead of surfacing at the end. An agent can be wired to live customer data in five
+        minutes, sometimes ten; a usable prototype takes an afternoon, and production runs one
+        to four weeks.</p>
+        <p>Moving at that pace is less about speed than about giving people something concrete to
+        react to. Teams describe what they want far more precisely once they can see their own
+        data moving, and the questions that follow that first session are usually the ones worth
+        building around.</p>
+      </div>
+    </div>
+
+    <div class="cap rv">
+      <h3><span class="n" aria-hidden="true">02</span>Each engagement makes the next one cheaper</h3>
+      <div>
+        <p>Every engagement produces pattern libraries, implementation playbooks and readiness
+        checklists. The next deployment inside that organization starts from those, and moves
+        considerably faster than the first one did.</p>
+        <p>The same compounding shows up in the running cost. As the reusable components get
+        tighter, token consumption falls and the model tier each task requires comes down with it.
+        Classification, extraction, routing and retrieval make up most of the volume, and they
+        run well below frontier capability. That makes engineering quality and inference spend
+        the same lever, and most budgets still treat them as separate problems.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
   <div class="col rv">
-    <span class="eyebrow">What the work is for</span>
+    <span class="eyebrow">What the work leaves behind</span>
     <h2>The job is finished when the team doesn't need you.</h2>
     <p class="lede">Capability works best sitting with the people closest to the problem. A
     deployment that only functions while its builder is in the room has moved the
@@ -482,9 +536,12 @@
     extend it: patterns they can copy, standards they hold each other to, and enough hands-on time
     that the next workload doesn't need a phone call. Hackathons tend to work better than documentation. Sitting with a
     customer's team in Japan beats shipping them a runbook.</p>
-    <p class="lede">The pattern libraries and the Center of Excellence exist for that reason, and
-    it is the part of this work I find most worth doing. Capability spread across a team keeps
-    compounding after an engagement ends, whereas a single expert eventually becomes the
+    <p class="lede">At Domo, inside a year, that meant building the practice as well as the
+    deployments: a repeatable five-phase delivery model, an engineering team of twenty, and a
+    forty-seven-person Center of Excellence, with the build standards and the hiring bar to match.
+    Those sixty-seven people now do this work; several hundred more have come through the training
+    underneath them, across every department and inside customer organizations. Capability spread
+    that widely keeps working after an engagement ends; a single expert eventually becomes the
     constraint.</p>
   </div>
 </section>
@@ -532,9 +589,34 @@
           <img class="lg" data-b="alchemer" alt="Alchemer" src="assets/logo-alchemer.209e51f5.png" loading="lazy" decoding="async">
         </dd></div>
     </dl>
-    <p class="bfnote rv">Across Domo and independent consulting. The regulated ones taught the most —
-    when a deployment has to clear a bank's security review, the engineering problem stops being the
-    model and starts being everything around it.</p>
+    <p class="bfnote rv">Across Domo and independent consulting.</p>
+  </div>
+</section>
+
+<section class="lift">
+  <div class="col rv">
+    <span class="eyebrow">Before this</span>
+    <div class="bef">
+      <h2 class="sm">I came to engineering through sales.</h2>
+      <div>
+        <p>Senior account executive at Turo — scaled top accounts past $100K a month and led the Host
+        Success team on the largest book in the company, then drove the company-wide migration from
+        Salesforce and Tableau to Domo. Before that, #1 U.S. sales representative at Milwaukee Tool,
+        growing a 250-account territory by 130%.</p>
+        <p>Discovery, executive rooms and carrying a number aren't adjacent skills I picked up on the
+        way to this job. They're where I started, and they're why I'm useful in the room before anyone
+        opens an editor.</p>
+        <p class="stack">JavaScript · React · SQL · REST&nbsp;APIs ·&nbsp;Amazon&nbsp;Redshift<br>
+        MCP · Multi-agent&nbsp;orchestration · RAG · Claude&nbsp;Code</p>
+        <figure class="port">
+          <picture>
+            <source type="image/avif" srcset="assets/turo-540.6be5f6ac.avif 540w, assets/turo-880.80ca4cdd.avif 880w" sizes="(max-width:900px) 100vw, 520px">
+            <img src="assets/turo-880.83b915b0.jpg" alt="Will West with a Turo award" width="880" height="540" loading="lazy" decoding="async">
+          </picture>
+          <figcaption>Turo · account manager MVP</figcaption>
+        </figure>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -543,7 +625,7 @@
     <span class="eyebrow">Where the biggest wins are</span>
     <h2 class="sm">Most teams are aiming too low.</h2>
     <p class="lede">The interesting question stopped being whether AI can do the task. It's how
-    much of the operating model you can rebuild once it can. Three places where that pays off
+    much of the operating model you can rebuild once it can. Two places where that pays off
     fastest right now:</p>
     <div class="thlist">
       <div><strong>Full SaaS replacement</strong><p>Most core SaaS functions a company pays for
@@ -553,34 +635,6 @@
       documented: the handoffs, the approvals, the copy-paste between systems. Agents with
       human-in-the-loop checkpoints take the mechanical parts and give people back the judgement
       calls.</p></div>
-      <div><strong>Inference economics</strong><p>Classification, extraction, routing and
-      retrieval make up most enterprise volume and run well below frontier capability. Right-size
-      the model to the task and the same work costs a fraction, with the savings widening as the
-      pattern library matures.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="lift">
-  <div class="col bef rv">
-    <h2 class="sm">I came to engineering through sales.</h2>
-    <div>
-      <p>Senior account executive at Turo — scaled top accounts past $100K a month and led the Host
-      Success team on the largest book in the company, then drove the company-wide migration from
-      Salesforce and Tableau to Domo. Before that, #1 U.S. sales representative at Milwaukee Tool,
-      growing a 250-account territory by 130%.</p>
-      <p>Discovery, executive rooms and carrying a number aren't adjacent skills I picked up on the
-      way to this job. They're where I started, and they're why I'm useful in the room before anyone
-      opens an editor.</p>
-      <p class="stack">JavaScript · React · SQL · REST&nbsp;APIs ·&nbsp;Amazon&nbsp;Redshift<br>
-      MCP · Multi-agent&nbsp;orchestration · RAG · Claude&nbsp;Code</p>
-      <figure class="port">
-        <picture>
-          <source type="image/avif" srcset="assets/turo-540.6be5f6ac.avif 540w, assets/turo-880.80ca4cdd.avif 880w" sizes="(max-width:900px) 100vw, 520px">
-          <img src="assets/turo-880.83b915b0.jpg" alt="Will West with a Turo award" width="880" height="540" loading="lazy" decoding="async">
-        </picture>
-        <figcaption>Turo · account manager MVP</figcaption>
-      </figure>
     </div>
   </div>
 </section>
@@ -626,12 +680,57 @@
   }
   addEventListener('scroll', onScroll, { passive:true }); onScroll();
 
-  if (reduce){ document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); }); return; }
+  // If observers are unavailable or motion is reduced, nothing may stay hidden: reveal
+  // everything up front. Only then is it safe to construct any IntersectionObserver.
+  var hasIO = 'IntersectionObserver' in window;
+  if (reduce || !hasIO){ document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); }); }
+  if (!hasIO) return;
+
+  var links = document.querySelectorAll('.hdr nav a');
+  var spy = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      links.forEach(function(a){
+        if (a.getAttribute('href') === '#' + e.target.id) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    });
+  }, { rootMargin:'-35% 0px -55% 0px' });
+  ['proof','method','built','contact'].forEach(function(id){
+    var el = document.getElementById(id); if (el) spy.observe(el);
+  });
+
+  if (reduce) return;
 
   var io = new IntersectionObserver(function(es){
     es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
   document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  // The stat bar counts itself in once, after the cells' entrance settles. Numbers are
+  // server-rendered, so no-JS and reduced-motion visitors always see the real values.
+  var cio = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      cio.unobserve(e.target);
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      e.target.querySelectorAll('b > span').forEach(function(el, i){
+        var t = parseInt(el.textContent, 10);
+        if (isNaN(t)) return;
+        el.textContent = '0';
+        setTimeout(function(){
+          var t0 = performance.now(), dur = 1300;
+          (function step(now){
+            var p = Math.min((now - t0) / dur, 1);
+            el.textContent = String(Math.round(t * (1 - Math.pow(2, -10 * p))));
+            if (p < 1) requestAnimationFrame(step); else el.textContent = String(t);
+          })(t0);
+        }, 620 + i * 90);
+      });
+    });
+  }, { threshold:.4 });
+  var bar = document.querySelector('.bar .col');
+  if (bar) cio.observe(bar);
 
 })();
 </script>
