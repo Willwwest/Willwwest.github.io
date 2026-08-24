@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Will West — Applied AI &amp; Forward Deployed Engineering</title>
-<meta name="description" content="200+ AI applications running in production inside enterprise customer environments, for more than a hundred accounts. Forward deployed engineering, applied AI, and the practice around it.">
+<meta name="description" content="200+ AI applications in production, across 100+ enterprises — built inside banks, insurers and universities, through security review. Forward deployed engineering, applied AI, and the delivery practice behind it.">
 <meta property="og:title" content="Will West — Applied AI &amp; Forward Deployed Engineering">
-<meta property="og:description" content="200+ AI applications in production, for more than a hundred accounts — running inside banks, insurers and universities.">
+<meta property="og:description" content="200+ AI applications in production, across 100+ enterprises — built inside banks, insurers and universities, and handed to the teams that run them.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#08080a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2308080a'/%3E%3Ctext x='32' y='44' font-family='Helvetica,Arial' font-size='36' font-weight='700' fill='white' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
@@ -61,7 +61,7 @@
      stat seam — anchored on three sides, floating on none. */
   .hwrap{flex:1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,44vw);align-items:stretch;
         padding-left:max(var(--gut), calc((100vw - 1140px)/2 + var(--gut)))}
-  .htxt{align-self:center;max-width:600px;
+  .htxt{align-self:center;max-width:660px;
         padding:calc(var(--hdr) + clamp(28px,6vh,60px)) clamp(30px,4.5vw,72px) clamp(34px,6vh,60px) 0}
   .hphoto{position:relative;margin:0;border-left:1px solid var(--hair)}
   /* grade (black point at the page ground, capped highlights) is baked into the asset —
@@ -91,7 +91,11 @@
                  to{opacity:1;transform:none;filter:blur(0)}}
   .kick{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
         color:var(--t4);margin-bottom:clamp(16px,3vh,26px);display:block}
-  h1{font-size:clamp(34px,4.7vw,62px);line-height:1.05;letter-spacing:-.03em;font-weight:700;
+  /* The headline is a deliberate three-line stack (see the .hbr breaks in the markup). The clamp
+     max is set so the longest line — "in production, across" — clears the 660px text column
+     minus its right padding at 1440. Lengthen the headline and this has to be re-measured, not
+     left to wrap ragged: the stack is the hero composition's anchor. */
+  h1{font-size:clamp(30px,3.9vw,56px);line-height:1.06;letter-spacing:-.03em;font-weight:700;
      color:var(--w);text-wrap:balance}
   /* vertical luminance falloff on display type — lit, not printed. color stays as fallback
      where background-clip:text is unsupported. */
@@ -330,9 +334,11 @@
   .hdr nav a[aria-current]{color:var(--w)}
 
 
+  /* Same three lines as before, but a longer sentence in them, so the short-viewport steps
+     come down slightly with the base clamp rather than staying where the old headline left them. */
   @media (max-height:820px) and (min-width:901px){
     .htxt{padding-top:calc(var(--hdr) + 16px);padding-bottom:24px}
-    h1{font-size:clamp(32px,4vw,48px)}
+    h1{font-size:clamp(30px,3.7vw,46px)}
     .hsub{margin-top:16px;font-size:15.5px}
     .hact{margin-top:20px}
     .hloc{margin-top:13px}
@@ -340,7 +346,7 @@
     .bar p{margin-top:5px;font-size:12px}
   }
   @media (max-height:680px) and (min-width:901px){
-    h1{font-size:clamp(29px,3.4vw,40px)}
+    h1{font-size:clamp(28px,3.2vw,38px)}
     .hsub{display:none}
   }
   @media(max-width:900px){
@@ -401,10 +407,10 @@
   <div class="hwrap">
     <div class="htxt">
       <span class="kick">Forward Deployed Engineering — Applied AI</span>
-      <h1>200+<br class="hbr"> AI applications<br class="hbr"> in production.</h1>
-      <p class="hsub">Running inside banks, insurers and universities, for more than a hundred
-      accounts, most of them inside the last year. The work is building where their data already
-      lives, getting it through security review, and handing it to their people.</p>
+      <h1>200+ AI applications<br class="hbr"> in production, across<br class="hbr"> 100+ enterprises.</h1>
+      <p class="hsub">Inside banks, insurers and universities, most of them within the last year.
+      The work is building where the data already lives, getting it through security review, and
+      handing it to the team that will run it.</p>
       <p class="hsub byline">Will West ·
       Director of AI Ecosystems at Domo</p>
       <div class="hact">
@@ -423,10 +429,10 @@
   </div>
   <div class="bar">
     <div class="col">
-      <div><b><span>5</span><i> min</i></b><p>to wire an agent to live enterprise data</p></div>
-      <div><b><span>4</span><i> wks</i></b><p>discovery to production, at the outside</p></div>
-      <div><b><span>25</span></b><p>pipeline repairs shipped live on stage, none failed</p></div>
-      <div><b><span>67</span></b><p>engineers and CoE members now doing this work</p></div>
+      <div><b><span>67</span></b><p>people in a delivery practice built from zero</p></div>
+      <div><b><span>100s</span></b><p>trained, across departments and customer teams</p></div>
+      <div><b><span>12</span></b><p>industries, from banking to higher education</p></div>
+      <div><b><span>4</span><i> wks</i></b><p>first conversation to production</p></div>
     </div>
   </div>
 </div>
@@ -446,7 +452,7 @@
           <i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></i>
           <span>CEO Keynote and AI Demo<br>with William West</span>
         </span>
-        <span class="foot">Domo · Domopalooza 2026 · 31 March</span>
+        <span class="foot">Domo · Domopalooza 2026 · 31 Mar</span>
       </a>
       <div class="medtxt">
         <h3>Building five agents live, on the mainstage</h3>
@@ -468,33 +474,33 @@
       <div>
         <div class="step">
           <em>The setup</em>
-          <p>A pipeline that fails is easy to notice. One that keeps running while quietly producing
+          <p>A pipeline that fails is easy to notice. One that keeps running while producing
           wrong numbers can go unnoticed for months, which makes it the more expensive problem to
-          have. So the ask on stage was deliberately the harder version: <b>"look through every
+          have. The ask on stage went to the harder version: <b>"look through every
           single ETL, find the ones that have issues, not just the ones that are broken"</b> —
           misspellings in filters, empty columns, bad CASE statements, joins that look suspicious.</p>
         </div>
         <div class="step">
           <em>What it found</em>
           <p>In a 2018–2020 HMDA mortgage dataflow, a <code>purchaser_type</code> CASE had eleven
-          WHEN clauses that all tested the same value — <b>only the first branch could ever fire.</b>
+          WHEN clauses that all tested the same value. <b>Only the first branch could ever fire.</b>
           Fannie Mae, Ginnie Mae, Freddie Mac: dead code, every row labelled "Not applicable."</p>
           <p>The more interesting one was a single typo: <code>Prinicial residence</code> where the data said
           <code>Principal residence</code>. <b>Every downstream filter looking for "Principal"
-          returned zero rows</b> — and nothing anywhere threw an error. Plus eight CASE statements
+          returned zero rows</b>, and nothing anywhere threw an error. Plus eight CASE statements
           with no ELSE, silently turning unmatched values into NULL.</p>
         </div>
         <div class="step">
           <em>The fix</em>
           <p>Then the follow-up prompt, typed live: <b>"how many of these can you fix for me right
-          now, my job depends on it."</b> Five dataflows repaired and saved in front of the room —
+          now, my job depends on it."</b> Five dataflows repaired and saved in front of the room:
           purchaser codes corrected, the typo fixed, ELSE clauses added, join keys aligned, NULLIF
           guards put around three divisions. <b>25 fixes across 5 ETLs, zero errors.</b></p>
         </div>
         <div class="step">
           <em>Why it matters</em>
           <p>None of that came down to model capability. It came down to governance, API access, and
-          knowing which kinds of failure tend to stay hidden. That is most of what this work is,
+          knowing which kinds of failure stay hidden. That is most of what this work is,
           on a stage or otherwise.</p>
         </div>
         <figure class="ev">
@@ -512,7 +518,7 @@
       <span>
         <span class="show">Governed Data for Agentic AI · Podcast</span>
         <h3>From Dashboards to Digital Operators: Building Agentic AI Apps on the Domo Platform</h3>
-        <span class="with">Building a human-resources agentic application live with Domo CMO Mark Boothe —
+        <span class="with">Building a human-resources agentic application live with Domo CMO Mark Boothe:
         human-in-the-loop workflows, role-level security, and pro-code App Studio builds.</span>
       </span>
       <span class="rt">28 Jul 2026<br>39 min<br>Listen on Spotify</span>
@@ -539,13 +545,12 @@
         has to clear a bank's security review, the engineering problem stops being the model and
         starts being everything around it.</p>
         <p>From there the build happens in their systems rather than a sandbox. Connectors,
-        authentication, pipelines and RBAC constraints get worked out against real conditions
-        instead of surfacing at the end. An agent can be wired to live customer data in five
+        authentication, pipelines and RBAC constraints meet real conditions early
+        instead of surfacing at the end. I can connect an agent to a customer's live data in five
         minutes, sometimes ten; a usable prototype takes an afternoon, and production runs one
         to four weeks.</p>
-        <p>Moving at that pace is less about speed than about giving people something concrete to
-        react to. Teams describe what they want far more precisely once they can see their own
-        data moving, and the questions that follow that first session are usually the ones worth
+        <p>That pace gives people something concrete to react to. Teams describe what they want more precisely once they can see their own
+        data moving, and the questions after that first session are usually the ones worth
         building around.</p>
       </div>
     </div>
@@ -554,13 +559,13 @@
       <h3><span class="n" aria-hidden="true">02</span>Each engagement makes the next one cheaper</h3>
       <div>
         <p>Every engagement produces pattern libraries, implementation playbooks and readiness
-        checklists. The next deployment inside that organization starts from those, and moves
-        considerably faster than the first one did.</p>
-        <p>The same compounding shows up in the running cost. As the reusable components get
+        checklists. The next deployment inside that organization starts from those, and moves faster than the first one did.</p>
+        <p>The running cost compounds the same way: as the reusable components get
         tighter, token consumption falls and the model tier each task requires comes down with it.
-        Classification, extraction, routing and retrieval make up most of the volume, and they
-        run well below frontier capability. That makes engineering quality and inference spend
-        the same lever, and most budgets still treat them as separate problems.</p>
+        Classification, extraction, routing and retrieval make up most of the volume. They run
+        well below frontier capability, and increasingly well on local models. That makes
+        engineering quality and inference spend the same lever, and most companies still budget them
+        separately.</p>
       </div>
     </div>
   </div>
@@ -573,17 +578,16 @@
     <p class="lede">Capability works best sitting with the people closest to the problem. A
     deployment that only functions while its builder is in the room has moved the
     dependency somewhere less visible.</p>
-    <p class="lede">The deliverable is a team that can
-    extend it: patterns they can copy, standards they hold each other to, and enough hands-on time
-    that the next workload doesn't need a phone call. Hackathons tend to work better than documentation. Sitting with a
-    customer's team in Japan beats shipping them a runbook.</p>
-    <p class="lede">At Domo, inside a year, that meant building the practice as well as the
-    deployments: a repeatable five-phase delivery model, an engineering team of twenty, and a
-    forty-seven-person Center of Excellence, with the build standards and the hiring bar to match.
-    Those sixty-seven people now do this work; several hundred more have come through the training
-    underneath them, across every department and inside customer organizations. Capability spread
-    that widely keeps working after an engagement ends; a single expert eventually becomes the
-    constraint.</p>
+    <p class="lede">At Domo that meant building the practice, not only the deployments. Inside a
+    year: a repeatable five-phase delivery model, an engineering team of twenty, a
+    forty-seven-person Center of Excellence, and the build standards and hiring bar underneath
+    them. Those sixty-seven people now run the work; several hundred more have come through the
+    training beneath them, across every department and inside customer organizations.</p>
+    <p class="lede">For the customer the deliverable is a team that can extend it: patterns they
+    can copy, standards they hold each other to, and enough hands-on time that the next workload
+    doesn't need a phone call. Hackathons work better than documentation. Sitting with a
+    customer's team in Japan beats shipping them a runbook. Capability spread that widely keeps
+    working after an engagement ends; a single expert eventually becomes the constraint.</p>
     <div class="fstrip rv" role="group" aria-label="Field photographs">
       <figure>
         <picture>
@@ -685,7 +689,7 @@
         <li>
           <span class="era">2015 – 2017 · Milwaukee Tool</span>
           <strong>#1 U.S. Sales Representative</strong>
-          <p>A 250-account distributor territory grown 130%, past $1M a year. Reading what a
+          <p>Grew a 250-account distributor territory 130%, past $1M a year. Reading what a
           buyer needs, and what their team will adopt, started here.</p>
           <a class="pic" href="assets/milwaukee-1400.4c98975e.jpg" target="_blank" rel="noopener"
              data-cap="Milwaukee Tool · demo day" aria-label="Enlarge: Will West with a customer at a Milwaukee Tool demo day">
@@ -714,7 +718,7 @@
           <p>Led nine to thirteen Host Success Managers on the largest account book in the
           company, coaching the team to run on data.</p>
           <a class="pic" href="assets/turo-880.83b915b0.jpg" target="_blank" rel="noopener"
-             data-cap="Turo · an award on his team" aria-label="Enlarge: a Host Success team member holding a Turo award">
+             data-cap="Turo · an award on my team" aria-label="Enlarge: a Host Success team member holding a Turo award">
             <picture>
           <source type="image/avif" srcset="assets/turo-540.6be5f6ac.avif 540w, assets/turo-880.80ca4cdd.avif 880w" sizes="(max-width:900px) 74vw, 280px">
           <img src="assets/turo-880.83b915b0.jpg" alt="A member of Will's Host Success team holding a Turo award" width="880" height="540" loading="lazy" decoding="async">
@@ -725,9 +729,9 @@
           <span class="era">2024 – 2025 · Turo</span>
           <strong>Data Analyst</strong>
           <p>Led the company-wide migration from Salesforce and Tableau to Domo and built the
-          Redshift business logic underneath it — the seat where selling turned into engineering.</p>
+          Redshift business logic underneath it: the seat where selling turned into engineering.</p>
           <a class="pic" href="assets/turo-analyst-1200.9a96c472.jpg" target="_blank" rel="noopener"
-             data-cap="Turo · CEO recognition · December 2024" aria-label="Enlarge: recognition slide naming Will West, Data Analyst">
+             data-cap="Turo · CEO recognition · Dec 2024" aria-label="Enlarge: recognition slide naming Will West, Data Analyst">
             <picture>
               <source type="image/avif" srcset="assets/turo-analyst-360.21094e49.avif 360w, assets/turo-analyst-720.824a07d1.avif 720w" sizes="(max-width:900px) 74vw, 280px">
               <img src="assets/turo-analyst-720.951ca4a0.jpg" alt="Recognition slide on the Turo CEO's shared screen: Will West, Data Analyst, Phoenix" width="1280" height="854" loading="lazy" decoding="async">
@@ -768,7 +772,7 @@
     <div class="thlist">
       <div><strong>Full SaaS replacement</strong><p>Most core SaaS functions a company pays for
       every month can now be rebuilt in-house, fitted to how that team works,
-      and owned outright. The build-versus-buy line moved, and most budgets have not caught up.</p></div>
+      and owned outright. The build-versus-buy line moved, and most companies have not caught up.</p></div>
       <div><strong>Agentic workflow optimization</strong><p>The wins are in the workflows nobody
       documented: the handoffs, the approvals, the copy-paste between systems. Agents with
       human-in-the-loop checkpoints take the mechanical parts and give people back the judgement
@@ -782,11 +786,12 @@
     <h2 class="eyebrow">Where I'd be useful</h2>
     <div class="want">
       <div><strong>The role</strong><p>Forward deployed engineering, applied AI, or solutions
-      leadership. Titles vary; the work is the same — owning the outcome inside the customer's
+      leadership. Titles vary; the work is the same: owning the outcome inside the customer's
       environment, and leaving their team better than you found it.</p></div>
       <div><strong>The company</strong><p>Somewhere the infrastructure or the model is the product,
-      and the hard part is getting it deployed and adopted.</p></div>
-      <div><strong>The arrangement</strong><p>Remote from Phoenix. I travel readily — customer
+      and the hard part is getting it deployed and adopted. Ideally early enough that the delivery
+      function still has to be built.</p></div>
+      <div><strong>The arrangement</strong><p>Remote from Phoenix. I travel often: customer
       on-sites, HQ weeks, conferences. Not relocating.</p></div>
     </div>
     <a class="big" href="mailto:willwwest87@gmail.com">willwwest87@gmail.com</a>
@@ -927,8 +932,11 @@
       cio.unobserve(e.target);
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       e.target.querySelectorAll('b > span').forEach(function(el, i){
+        // Only animate a cell whose value is a bare integer. parseInt("100s") returns 100
+        // rather than NaN, so the old isNaN guard let the counter finish by writing "100"
+        // back and silently dropping the "s".
+        if (!/^\d+$/.test(el.textContent.trim())) return;
         var t = parseInt(el.textContent, 10);
-        if (isNaN(t)) return;
         el.textContent = '0';
         setTimeout(function(){
           var t0 = performance.now(), dur = 1300;
