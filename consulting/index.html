@@ -41,6 +41,9 @@
        Every block lands between 51 and 63 characters per line, inside the 45-75 band. Re-check
        with that band, not by eye, if any font-size on this page changes. */
     --m-lede:660px; --m-body:560px; --m-small:480px; --m-cell:26ch;
+    /* keyline traced round each client mark so dark-ink logos read on the page ground.
+       Cool grey rather than #fff: pure white haloes at this size and reads as a glow. */
+    --ok:#cfd2d8;
     /* One ratio for every asymmetric two-column block, used in two orientations:
          --split-a   narrow column first  (.cs fact rail, .cap heading)
          --split-b   narrow column second (.med caption, .bg2 kit)
@@ -287,12 +290,12 @@
   /* captions run one or two lines; growing the caption keeps the card bottoms on one rule */
   .fstrip figcaption{flex:1}
   .fstrip img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;
-       filter:grayscale(1) contrast(.98) brightness(.9);transition:transform .4s,filter .4s}
-  /* thumbs are graded to match the page; the lightbox shows the untouched colour original */
+       transition:transform .4s}
+  /* thumbs now ship in colour, the same grade the lightbox opens */
   .fstrip .pic{display:block}
   .fstrip figure{transition:border-color .35s,transform .35s}
   .fstrip figure:hover{border-color:rgba(255,255,255,.34);transform:translateY(-2px)}
-  .fstrip .pic:hover img{transform:scale(1.04);filter:grayscale(0) contrast(1) brightness(1)}
+  .fstrip .pic:hover img{transform:scale(1.04)}
   .fstrip figcaption{padding:10px 12px;border-top:1px solid var(--hair2);font-family:var(--mono);
        font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--t4);line-height:1.5}
 
@@ -334,18 +337,45 @@
   .sect dt span{font-size:16.5px;font-weight:640;letter-spacing:-.012em;color:var(--w);display:block}
   .sect dt em{font-style:normal;display:block;margin-top:8px;font-size:13.2px;line-height:1.5;color:var(--t4);max-width:var(--m-cell)}
   .sect dd{display:flex;flex-wrap:wrap;align-items:center;gap:clamp(16px,2.2vw,22px) clamp(24px,3vw,38px)}
-  /* Client marks. Each is a white-on-transparent PNG; heights are set per logo by optical
-     weight, not by bounding box, so a wide wordmark and a tall shield read as equal. */
-  .lg{height:var(--h,24px);width:auto;flex:none;opacity:.8}
-  .lg[data-b="alchemer"]{--h:20px}   .lg[data-b="capsa"]{--h:26px}
-  .lg[data-b="cisco"]{--h:32px}      .lg[data-b="concentrix"]{--h:20px}
-  .lg[data-b="cti"]{--h:26px}        .lg[data-b="fidelity"]{--h:25px}
-  .lg[data-b="fogo"]{--h:21px}       .lg[data-b="fwm"]{--h:26px}
-  .lg[data-b="manulife"]{--h:24px}   .lg[data-b="omnicom"]{--h:17px}
-  .lg[data-b="regions"]{--h:22px}    .lg[data-b="roberthalf"]{--h:20px}
-  .lg[data-b="seattletimes"]{--h:21px} .lg[data-b="sixflags"]{--h:26px}
-  .lg[data-b="tamu"]{--h:27px}       .lg[data-b="ups"]{--h:40px}
-  .lg[data-b="usbank"]{--h:25px}     .lg[data-b="yum"]{--h:30px}
+  /* Client marks, in full brand colour. Heights are set per logo by optical weight, not by
+     bounding box, so a wide wordmark and a tall shield read as equal.
+
+     Each sits on a light chip, and that is a requirement rather than a style choice: eleven of
+     the eighteen are dark ink drawn for white paper (Fogo measures 0.01 ink luminance, Alchemer
+     0.11, Seattle Times 0.13) and are invisible on this page's ground, and three more are a
+     colour symbol with a dark wordmark that half-vanishes, which reads as a broken image. The
+     chip gives every mark the background it was designed for. CTI Foods and Fort Wayne Metals
+     are reverse lockups and are inverted at build time — see tools/build-logos-color.js.
+
+     The chip is #f4f4f6 rather than pure white: at this size a field of #fff chips on near-black
+     glares, and the eighth of a stop costs nothing in brand fidelity. */
+  /* Full brand colour on the page ground, no plate. Eleven of the eighteen are dark ink drawn
+     for white paper (Fogo measures 0.01 ink luminance, Alchemer 0.11, Seattle Times 0.13) and
+     would be invisible here, so each mark carries a 1px white outline traced around its own
+     silhouette. Four chained drop-shadows, one per direction: each shadow applies to the result
+     of the last, so the four together close the outline round curves and diagonals.
+
+     Deliberately a CSS filter rather than a baked-in stroke. These ship at 88px tall and display
+     between 17 and 40px, so a stroke drawn into the asset lands at a third of a pixel after the
+     downscale and turns to mush. The filter runs on the rendered element, so 1px is 1px. */
+  .lg{height:var(--h,24px);width:auto;flex:none;display:block;
+       filter:drop-shadow(.75px 0 0 var(--ok)) drop-shadow(-.75px 0 0 var(--ok))
+              drop-shadow(0 .75px 0 var(--ok)) drop-shadow(0 -.75px 0 var(--ok))}
+  /* These six read on the page ground unaided — 0% of their ink falls under 2.2:1 against it.
+     Four are bright colour marks; CTI Foods and Fort Wayne Metals are white lockups that the
+     keyline was quietly inflating. Re-measure with the method in README before editing this
+     list; it is not a taste call. */
+  .lg[data-b="cisco"],.lg[data-b="omnicom"],.lg[data-b="regions"],
+  .lg[data-b="yum"],.lg[data-b="cti"],.lg[data-b="fwm"]{filter:none}
+  .lg[data-b="alchemer"]{--h:23.5px} .lg[data-b="capsa"]{--h:30.5px}
+  .lg[data-b="cisco"]{--h:38px}      .lg[data-b="concentrix"]{--h:23.5px}
+  .lg[data-b="cti"]{--h:30.5px}      .lg[data-b="fidelity"]{--h:29.5px}
+  .lg[data-b="fogo"]{--h:24.5px}     .lg[data-b="fwm"]{--h:30.5px}
+  .lg[data-b="manulife"]{--h:28.5px} .lg[data-b="omnicom"]{--h:20px}
+  .lg[data-b="regions"]{--h:26px}    .lg[data-b="roberthalf"]{--h:23.5px}
+  .lg[data-b="seattletimes"]{--h:24.5px} .lg[data-b="sixflags"]{--h:30.5px}
+  .lg[data-b="tamu"]{--h:32px}       .lg[data-b="ups"]{--h:47px}
+  .lg[data-b="usbank"]{--h:29.5px}   .lg[data-b="yum"]{--h:35px}
   .bfnote{margin-top:clamp(26px,3.4vw,42px);font-size:14.5px;color:var(--t3);max-width:var(--m-small)}
 
   /* thesis */
@@ -387,8 +417,11 @@
       background:var(--s2);box-shadow:0 12px 32px -20px rgba(0,0,0,.65);
       transition:border-color .35s,transform .35s}
   .tl .pic:hover{border-color:rgba(255,255,255,.34);transform:translateY(-2px)}
+  /* Colour at rest, same as the field strip. Both sets are asserted identical in
+     tools/check-render.js so they cannot drift apart again. */
   .tl .pic img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;
-      filter:grayscale(1) contrast(.98) brightness(.9)}
+      transition:transform .4s}
+  .tl .pic:hover img{transform:scale(1.04)}
 
   /* lightbox — native dialog; without script (or without dialog support) thumbs stay links */
   /* margin:auto restores the UA centering the global margin reset removed */
@@ -565,8 +598,8 @@
     </div>
     <figure class="hphoto">
       <picture>
-          <source type="image/avif" srcset="../assets/portrait-640.b9d4c1c2.avif 640w, ../assets/portrait-1137.5155377e.avif 1137w" sizes="(max-width:900px) 100vw, 44vw">
-          <img src="../assets/portrait-1137.26ebe28d.jpg" alt="Will West" width="1137" height="1365" fetchpriority="high" decoding="async">
+          <source type="image/avif" srcset="../assets/portrait-640.c06d48e2.avif 640w, ../assets/portrait-1137.8e4d8087.avif 1137w" sizes="(max-width:900px) 100vw, 44vw">
+          <img src="../assets/portrait-1137.fd8e7c0e.jpg" alt="Will West" width="1137" height="1365" fetchpriority="high" decoding="async">
         </picture>
     </figure>
   </div>
@@ -588,8 +621,8 @@
       <a class="vid" href="https://www.youtube.com/watch?v=7HvOlSnfubQ" target="_blank" rel="noopener"
          aria-label="Watch the CEO Keynote and AI Demo with William West on YouTube">
         <picture>
-          <source type="image/avif" srcset="../assets/keynote-640.1a387d41.avif 640w, ../assets/keynote-1000.996903dd.avif 1000w" sizes="(max-width:900px) 100vw, 610px">
-          <img class="shot" src="../assets/keynote-1000.f3813fda.jpg" alt="" width="1000" height="562" loading="lazy" decoding="async">
+          <source type="image/avif" srcset="../assets/keynote-640.73d6f6ba.avif 640w, ../assets/keynote-1000.22261efb.avif 1000w" sizes="(max-width:900px) 100vw, 610px">
+          <img class="shot" src="../assets/keynote-1000.349839ca.jpg" alt="" width="2000" height="1124" loading="lazy" decoding="async">
         </picture>
         <span class="yt"><b></b> Watch on YouTube</span>
         <span class="mid">
@@ -784,40 +817,40 @@
       <div class="sect rv">
         <dt><span>Financial services</span><em>Agent deployments inside RBAC-governed environments, through security review.</em></dt>
         <dd>
-          <img class="lg" data-b="regions" alt="Regions Bank" src="../assets/logo-regions.d700ddfe.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="usbank" alt="U.S. Bank" src="../assets/logo-usbank.4ca3b930.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="fidelity" alt="Fidelity" src="../assets/logo-fidelity.a4d4e368.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="manulife" alt="Manulife" src="../assets/logo-manulife.2ae40904.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="regions" alt="Regions Bank" src="../assets/logoc-regions.51b1004c.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="usbank" alt="U.S. Bank" src="../assets/logoc-usbank.8658b7de.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="fidelity" alt="Fidelity" src="../assets/logoc-fidelity.ca207bc9.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="manulife" alt="Manulife" src="../assets/logoc-manulife.d47fb3d9.png" loading="lazy" decoding="async">
         </dd></div>
       <div class="sect rv">
         <dt><span>Global enterprise</span><em>Custom applications and API connectors wiring source systems into analytics.</em></dt>
         <dd>
-          <img class="lg" data-b="cisco" alt="Cisco" src="../assets/logo-cisco.93e6e66b.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="ups" alt="UPS" src="../assets/logo-ups.aaacdf6a.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="omnicom" alt="Omnicom" src="../assets/logo-omnicom.22297d41.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="concentrix" alt="Concentrix" src="../assets/logo-concentrix.61217d14.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="roberthalf" alt="Robert Half" src="../assets/logo-roberthalf.5d0cec3b.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="cisco" alt="Cisco" src="../assets/logoc-cisco.2be52e64.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="ups" alt="UPS" src="../assets/logoc-ups.fdbeb43e.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="omnicom" alt="Omnicom" src="../assets/logoc-omnicom.91aba5e6.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="concentrix" alt="Concentrix" src="../assets/logoc-concentrix.91c2a730.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="roberthalf" alt="Robert Half" src="../assets/logoc-roberthalf.e3eb251c.png" loading="lazy" decoding="async">
         </dd></div>
       <div class="sect rv">
         <dt><span>Consumer &amp; hospitality</span><em>Operational dashboards and agent workflows across distributed sites.</em></dt>
         <dd>
-          <img class="lg" data-b="yum" alt="Yum! Brands" src="../assets/logo-yum.f2843398.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="sixflags" alt="Six Flags" src="../assets/logo-sixflags.384fdf92.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="fogo" alt="Fogo de Chão" src="../assets/logo-fogo.68940d01.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="yum" alt="Yum! Brands" src="../assets/logoc-yum.19d61ec0.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="sixflags" alt="Six Flags" src="../assets/logoc-sixflags.9b398d22.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="fogo" alt="Fogo de Chão" src="../assets/logoc-fogo.2238f260.png" loading="lazy" decoding="async">
         </dd></div>
       <div class="sect rv">
         <dt><span>Healthcare &amp; industrial</span><em>Pipelines and reporting under regulated data handling.</em></dt>
         <dd>
-          <img class="lg" data-b="capsa" alt="Capsa Healthcare" src="../assets/logo-capsa.44e5dde2.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="cti" alt="CTI Foods" src="../assets/logo-cti.d7d6947a.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="fwm" alt="Fort Wayne Metals" src="../assets/logo-fwm.e48cb02e.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="capsa" alt="Capsa Healthcare" src="../assets/logoc-capsa.9a4b92aa.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="cti" alt="CTI Foods" src="../assets/logoc-cti.614f6086.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="fwm" alt="Fort Wayne Metals" src="../assets/logoc-fwm.685d3868.png" loading="lazy" decoding="async">
         </dd></div>
       <div class="sect rv">
         <dt><span>Media &amp; education</span><em>Data products and enablement for non-technical teams.</em></dt>
         <dd>
-          <img class="lg" data-b="seattletimes" alt="The Seattle Times" src="../assets/logo-seattletimes.172a8a31.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="tamu" alt="Texas A&amp;M AgriLife" src="../assets/logo-tamu.b00b4ddc.png" loading="lazy" decoding="async">
-          <img class="lg" data-b="alchemer" alt="Alchemer" src="../assets/logo-alchemer.209e51f5.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="seattletimes" alt="The Seattle Times" src="../assets/logoc-seattletimes.4f52fcb6.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="tamu" alt="Texas A&amp;M AgriLife" src="../assets/logoc-tamu.03e11cba.png" loading="lazy" decoding="async">
+          <img class="lg" data-b="alchemer" alt="Alchemer" src="../assets/logoc-alchemer.932acddc.png" loading="lazy" decoding="async">
         </dd></div>
     </dl>
     <p class="bfnote rv">Built at Domo and through independent consulting.</p>
